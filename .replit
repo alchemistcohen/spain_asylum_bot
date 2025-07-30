@@ -1,0 +1,49 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-25_05"
+packages = ["chromedriver", "chromium", "geckodriver", "gitFull", "playwright-driver", "xvfb-run"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Install Dependencies"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "asylum_bot_install"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "AsylumBot"
+
+[[workflows.workflow]]
+name = "Install Dependencies"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "uv add playwright aiohttp python-dotenv asyncio logging"
+
+[[workflows.workflow]]
+name = "asylum_bot_install"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "uv add playwright aiohttp python-dotenv && playwright install chromium"
+
+[[workflows.workflow]]
+name = "AsylumBot"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python main.py"
